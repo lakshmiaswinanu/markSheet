@@ -1,8 +1,11 @@
 import { React } from 'react';
 import { map } from '@laufire/utils/collection';
+import { peek } from '@laufire/utils/debug';
 
 const Body = (context) => {
-	const { data } = context;
+	const { config: { subjects }, data } = context;
+
+	peek(context);
 
 	return <tbody>
 		{map(data, (mark, index) => {
@@ -11,11 +14,8 @@ const Body = (context) => {
 			return <tr key={ index }>
 				<td>{mark.rollNo}</td>
 				<td>{mark.name}</td>
-				<td>{mark.tamil}</td>
-				<td>{mark.english}</td>
-				<td>{mark.maths}</td>
-				<td>{mark.science}</td>
-				<td>{mark.social}</td>
+				{map(subjects, (subject, sub) =>
+					<td key={ sub }> {mark[subject]} </td>)}
 				<td>{mark.total}</td>
 				<td className={ className }>{mark.result}</td>
 				<td>{mark.rank}</td>
