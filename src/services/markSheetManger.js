@@ -1,28 +1,19 @@
-import { peek } from '@laufire/utils/debug';
-const getTotalMark = (mark) =>
-	Number(mark.tamil)
-	+ Number(mark.english)
-	+ Number(mark.science)
-	+ Number(mark.maths)
-	+ Number(mark.social);
+const getTotalMark = (context) =>
+	context.config.subjects.reduce((acc, cur) =>
+		acc + Number(context.data[cur]), 0);
 
-const getResult = (markSheets) =>
-	(Math.min(
-		markSheets.tamil,
-		markSheets.english,
-		markSheets.science,
-		markSheets.maths,
-		markSheets.social
-	) >= '40'
-		? 'pass'
-		: 'Fail');
+const getResult = (context) => {
+	const minValue = context.config.subjects.map((sub) =>
+		context.data[sub]);
 
-const getMarkList = (mark) =>
-	mark.map((marks) => ({
-		...marks,
-		total: getTotalMark(marks),
-		result: getResult(marks),
-	}));
+	return Math.min(...minValue) >= '35' ? 'pass' : 'fail';
+};
+
+const getMarkList = (context) => ({
+	...context.data,
+	total: getTotalMark(context),
+	result: getResult(context),
+});
 
 const getRank = (totalResult) => {
 	const sortList = totalResult.sort((a, b) => b.total - a.total);
@@ -40,11 +31,10 @@ const getRank = (totalResult) => {
 	return rank;
 };
 
-const markSheetManger = (data) => {
-	peek(data);
-	const markList = getMarkList(data);
-	const rankList = getRank(markList);
-
+const markSheetManger = (context) => {
+	const addList = context.data.map((markSheet) =>
+		getMarkList({ ...context, data: markSheet }));
+	const rankList = getRank(addList);
 	// eslint-disable-next-line no-console
 
 	return rankList;

@@ -11,6 +11,13 @@ const config = {
 		'result',
 		'rank',
 	],
+	subjects: [
+		'tamil',
+		'english',
+		'maths',
+		'science',
+		'social',
+	],
 };
 
 export default config;

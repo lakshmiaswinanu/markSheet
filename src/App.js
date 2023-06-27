@@ -1,14 +1,14 @@
 import { React } from 'react';
 import './App.scss';
 import markSheetManger from './services/markSheetManger';
-import data from './services/data';
 import Table from './components/Table';
+import markSheets from './data/markSheets';
 
 const App = (context) =>
-
 	<div className="App">
-		Ready to start.
-		<Table{ ...{ ...context, data: markSheetManger(data) } }/>
+		<Table { ...{ ...context, data: markSheetManger({ ...context,
+			data: markSheets }) } }
+		/>
 	</div>;
 
 export default App;
